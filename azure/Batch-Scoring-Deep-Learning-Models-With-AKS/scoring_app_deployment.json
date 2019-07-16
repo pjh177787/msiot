@@ -1,0 +1,104 @@
+{
+    "apiVersion": "apps/v1beta1",
+    "kind": "Deployment",
+    "metadata": {
+        "labels": {
+            "purpose": "dequeue_messages_and_apply_style_transfer"
+        },
+        "name": "scoring-app"
+    },
+    "spec": {
+        "replicas": 4,
+        "template": {
+            "metadata": {
+                "labels": {
+                    "app": "scoring-app"
+                }
+            },
+            "spec": {
+                "containers": [
+                    {
+                        "env": [
+                            {
+                                "name": "MOUNT_DIR",
+                                "value": "/data"
+                            },
+                            {
+                                "name": "LB_LIBRARY_PATH",
+                                "value": "$LD_LIBRARY_PATH:/usr/local/nvidia/lib64:/opt/conda/envs/py3.6/lib"
+                            },
+                            {
+                                "name": "DP_DISABLE_HEALTHCHECKS",
+                                "value": "xids"
+                            },
+                            {
+                                "name": "STORAGE_MODEL_DIR",
+                                "value": "models"
+                            },
+                            {
+                                "name": "SUBSCRIPTION_ID",
+                                "value": "43f94930-ca31-4ddc-91c2-2f1be4f0e8f3"
+                            },
+                            {
+                                "name": "RESOURCE_GROUP",
+                                "value": "oxford"
+                            },
+                            {
+                                "name": "REGION",
+                                "value": "chinaeast2"
+                            },
+                            {
+                                "name": "SB_SHARED_ACCESS_KEY_NAME",
+                                "value": "RootManageSharedAccessKey"
+                            },
+                            {
+                                "name": "SB_SHARED_ACCESS_KEY_VALUE",
+                                "value": "Ap2qhvyHeoIjvq1GjwkVP3/Xn5J1epdB1bXZgbHfmwA="
+                            },
+                            {
+                                "name": "SB_NAMESPACE",
+                                "value": "oxfordnames"
+                            },
+                            {
+                                "name": "SB_QUEUE",
+                                "value": "oxfordqueue"
+                            }
+                        ],
+                        "image": "pjh177787/oxford_scoring_app:latest",
+                        "name": "scoring-app",
+                        "ports": [
+                            {
+                                "containerPort": 433
+                            }
+                        ],
+                        "resources": {},
+                        "volumeMounts": [
+                            {
+                                "mountPath": "/data",
+                                "name": "blob"
+                            }
+                        ]
+                    }
+                ],
+                "volumes": [
+                    {
+                        "flexVolume": {
+                            "driver": "azure/blobfuse",
+                            "options": {
+                                "container": "oxfordsc",
+                                "mountoptions": "--file-cache-timeout-in-seconds=120 --use-https=true",
+                                "tmppath": "/tmp/blobfuse"
+                            },
+                            "readOnly": false,
+                            "secretRef": {
+                                "name": "blobfusecreds"
+                            }
+                        },
+                        "name": "blob"
+                    }
+                ]
+            }
+        }
+    }
+}
+
