@@ -1,1 +1,0 @@
-do = Print(fac(5)) ; fac(i) = if i > 1 then fac(i-1)*i else 1 

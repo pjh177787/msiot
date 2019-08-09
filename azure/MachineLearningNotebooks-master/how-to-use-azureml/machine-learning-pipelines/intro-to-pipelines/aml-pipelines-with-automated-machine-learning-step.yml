@@ -1,8 +1,0 @@
-name: aml-pipelines-with-automated-machine-learning-step
-dependencies:
-- pip:
-  - azureml-sdk
-  - azureml-train-automl
-  - azureml-widgets
-  - matplotlib
-  - pandas_ml

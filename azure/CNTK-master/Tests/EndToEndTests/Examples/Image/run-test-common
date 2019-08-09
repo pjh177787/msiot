@@ -1,5 +1,0 @@
-#!/bin/bash
-
-. $TEST_ROOT_DIR/run-test-common
-
-imageLayout=cudnn

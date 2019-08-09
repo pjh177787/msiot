@@ -1,1 +1,0 @@
-do = new PrintAction [ what = if 13 > 42 || 12 > 1 then 'Hello World' + "!" else 'Oops?']
